@@ -1,0 +1,146 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  user
+  admin
+}
+
+model User {
+  id                   String                @id @default(cuid())
+  firstName            String
+  lastName             String
+  email                String                @unique
+  phone                String?
+  newsletterSubscribed Boolean               @default(false)
+  passwordHash         String
+  role                 Role                  @default(user)
+  createdAt            DateTime              @default(now())
+  updatedAt            DateTime              @updatedAt
+  ratings              PerformanceRating[]
+  feedbacks            PerformanceFeedback[]
+}
+
+model Creator {
+  id            String               @id @default(cuid())
+  name          String
+  slug          String               @unique
+  profession    String
+  shortBio      String
+  longBio       String?
+  coverImageUrl String?
+  createdAt     DateTime             @default(now())
+  updatedAt     DateTime             @updatedAt
+  performances  CreatorPerformance[]
+}
+
+model Performance {
+  id               String                @id @default(cuid())
+  title            String
+  slug             String                @unique
+  shortDescription String
+  longDescription  String
+  posterUrl        String?
+  ticketLink       String?
+  createdAt        DateTime              @default(now())
+  updatedAt        DateTime              @updatedAt
+  events           Event[]
+  critiques        Critique[]
+  creators         CreatorPerformance[]
+  images           PerformanceImage[]
+  ratings          PerformanceRating[]
+  feedbacks        PerformanceFeedback[]
+}
+
+model PerformanceImage {
+  id            String      @id @default(cuid())
+  performanceId String
+  imageUrl      String
+  order         Int         @default(0)
+  createdAt     DateTime    @default(now())
+  performance   Performance @relation(fields: [performanceId], references: [id], onDelete: Cascade)
+}
+
+model PerformanceRating {
+  id            String      @id @default(cuid())
+  performanceId String
+  userId        String
+  value         Int
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  performance   Performance @relation(fields: [performanceId], references: [id], onDelete: Cascade)
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([performanceId, userId])
+}
+
+model PerformanceFeedback {
+  id            String      @id @default(cuid())
+  performanceId String
+  userId        String
+  content       String
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  performance   Performance @relation(fields: [performanceId], references: [id], onDelete: Cascade)
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model CreatorPerformance {
+  creatorId     String
+  performanceId String
+  creator       Creator     @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  performance   Performance @relation(fields: [performanceId], references: [id], onDelete: Cascade)
+
+  @@id([creatorId, performanceId])
+}
+
+model Event {
+  id            String      @id @default(cuid())
+  performanceId String
+  startAt       DateTime
+  venue         String
+  ticketLink    String?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  performance   Performance @relation(fields: [performanceId], references: [id], onDelete: Cascade)
+}
+
+model News {
+  id            String   @id @default(cuid())
+  title         String
+  slug          String   @unique
+  excerpt       String
+  content       String
+  coverImageUrl String?
+  publishedAt   DateTime
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Critique {
+  id            String      @id @default(cuid())
+  performanceId String
+  title         String
+  source        String
+  url           String
+  quote         String?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  performance   Performance @relation(fields: [performanceId], references: [id], onDelete: Cascade)
+}
+
+model Document {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  fileUrl     String
+  fileType    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

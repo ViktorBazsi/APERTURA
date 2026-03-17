@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom';
 
 const variants = {
-  primary: 'bg-ember text-white hover:bg-[#e57a57] shadow-glow',
-  secondary: 'border border-white/15 bg-white/5 text-canvas hover:bg-white/10',
-  ghost: 'text-canvas/75 hover:text-canvas',
+  primary: 'bg-ember text-white shadow-glow hover:bg-[#e57a57]',
+  secondary: 'border border-white/12 bg-white/[0.045] text-canvas hover:bg-white/[0.08]',
+  ghost: 'text-canvas/72 hover:bg-white/[0.05] hover:text-canvas',
 };
 
 const sizes = {
@@ -17,7 +17,7 @@ function ButtonLink({ to = '#', children, variant = 'primary', size = 'md', clas
     <Link
       to={to}
       onClick={onClick}
-      className={`inline-flex items-center gap-2 rounded-full font-medium transition duration-200 ${variants[variant]} ${sizes[size]} ${className}`}
+      className={`inline-flex items-center justify-center gap-2 rounded-full font-medium transition duration-200 ${variants[variant]} ${sizes[size]} ${className}`}
     >
       {children}
     </Link>

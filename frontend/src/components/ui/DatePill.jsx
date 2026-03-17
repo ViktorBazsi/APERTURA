@@ -7,9 +7,9 @@ function formatDate(dateString) {
 
 function DatePill({ date, time }) {
   return (
-    <div className="inline-flex items-center gap-2 rounded-full border border-gold/20 bg-gold/10 px-4 py-2 text-sm text-gold">
+    <div className='inline-flex items-center gap-2 rounded-full border border-gold/20 bg-gold/10 px-4 py-2 text-sm text-gold'>
       <span>{formatDate(date)}</span>
-      {time ? <span className="text-gold/60">• {time}</span> : null}
+      {time ? <span className='text-gold/60'>• {time}</span> : null}
     </div>
   );
 }
