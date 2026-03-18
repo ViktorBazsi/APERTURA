@@ -7,17 +7,63 @@ const schema = Yup.object({
   venue: Yup.string().required('Kötelező'),
 });
 
+function formatDateTimeLocal(value) {
+  if (!value) {
+    return '';
+  }
+
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) {
+    return '';
+  }
+
+  const pad = (number) => String(number).padStart(2, '0');
+
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+}
+
+function toIsoDateTime(value) {
+  if (!value) {
+    return '';
+  }
+
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) {
+    return '';
+  }
+
+  return date.toISOString();
+}
+
 function EventForm({ initialValues, onSubmit, performanceOptions = [], submitLabel = 'Mentés' }) {
+  const normalizedInitialValues = {
+    ...initialValues,
+    startAt: formatDateTimeLocal(initialValues?.startAt),
+  };
+
   return (
-    <Formik initialValues={initialValues} validationSchema={schema} onSubmit={onSubmit} enableReinitialize>
+    <Formik
+      initialValues={normalizedInitialValues}
+      validationSchema={schema}
+      enableReinitialize
+      onSubmit={(values, helpers) => onSubmit({
+        ...values,
+        startAt: toIsoDateTime(values.startAt),
+      }, helpers)}
+    >
       <Form className='grid gap-4'>
         <Field as='select' name='performanceId' className='rounded-2xl border border-white/10 bg-white/5 px-4 py-3'>
           <option value=''>Válassz előadást</option>
           {performanceOptions.map((performance) => <option key={performance.id} value={performance.id}>{performance.title}</option>)}
         </Field>
         <ErrorMessage name='performanceId' component='p' className='text-sm text-ember' />
-        <Field name='startAt' className='rounded-2xl border border-white/10 bg-white/5 px-4 py-3' placeholder='2026-05-01T19:00:00.000Z' />
+
+        <div>
+          <Field type='datetime-local' name='startAt' className='w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3' />
+          <p className='mt-2 text-xs text-canvas/45'>Dátum és kezdési idő emberbarát formában.</p>
+        </div>
         <ErrorMessage name='startAt' component='p' className='text-sm text-ember' />
+
         <Field name='venue' className='rounded-2xl border border-white/10 bg-white/5 px-4 py-3' placeholder='Helyszín' />
         <ErrorMessage name='venue' component='p' className='text-sm text-ember' />
         <Field name='ticketLink' className='rounded-2xl border border-white/10 bg-white/5 px-4 py-3' placeholder='Jegylink' />

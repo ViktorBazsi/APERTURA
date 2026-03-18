@@ -59,7 +59,11 @@ function PerformanceDetailPage() {
       <Section>
         <div className='grid gap-7 lg:grid-cols-[1.05fr_0.95fr]'>
           <div className='grid gap-6'>
-            {performance.posterUrl ? <img src={performance.posterUrl} alt={performance.title} className='h-[460px] w-full rounded-[34px] object-cover' /> : null}
+            {performance.posterUrl ? (
+              <div className='flex h-[520px] w-full items-center justify-center rounded-[34px] border border-white/8 bg-[linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.02))] p-5 md:p-6'>
+                <img src={performance.posterUrl} alt={performance.title} className='h-full w-full rounded-[28px] object-contain' />
+              </div>
+            ) : null}
             <div className='surface p-7 md:p-8'>
               <h2 className='text-2xl'>Kapcsolódó alkotók</h2>
               <div className='mt-5 flex flex-wrap gap-3'>

@@ -9,6 +9,7 @@ import uploadRoutes from './uploads.routes.js';
 import userRoutes from './users.routes.js';
 import documentRoutes from './documents.routes.js';
 import feedbackRoutes from './feedbacks.routes.js';
+import contactRoutes from './contact.routes.js';
 
 const router = Router();
 
@@ -21,6 +22,7 @@ router.use('/news', newsRoutes);
 router.use('/critiques', critiqueRoutes);
 router.use('/documents', documentRoutes);
 router.use('/feedbacks', feedbackRoutes);
+router.use('/contact', contactRoutes);
 router.use('/uploads', uploadRoutes);
 
 export default router;

@@ -6,6 +6,7 @@ import Card from '../components/ui/Card';
 import Badge from '../components/ui/Badge';
 import DatePill from '../components/ui/DatePill';
 import ButtonLink from '../components/ui/ButtonLink';
+import ImageOverlayLinkCard from '../components/ui/ImageOverlayLinkCard';
 import { useAuth } from '../context/AuthContext';
 import { creatorService } from '../services/creator.service';
 import { eventService } from '../services/event.service';
@@ -92,25 +93,20 @@ function LandingPage() {
         {!isLoading && !error ? (
           <div className='grid gap-6 lg:grid-cols-2'>
             {events.length ? events.map((event) => (
-              <Card key={event.id}>
-                {event.performance?.posterUrl ? (
-                  <img src={event.performance.posterUrl} alt={event.performance.title || 'Program'} className='h-56 w-full rounded-[24px] object-cover' />
-                ) : (
-                  <div className='flex h-56 w-full items-end rounded-[24px] border border-dashed border-white/15 bg-gradient-to-br from-white/10 to-transparent p-5 text-sm text-canvas/40'>
-                    Eseményvizuál hamarosan
-                  </div>
-                )}
-                <div className='mt-5 flex flex-wrap items-center justify-between gap-3'>
-                  <DatePill date={event.startAt} />
-                  <Badge tone='warm'>{event.performance?.title || 'Program'}</Badge>
-                </div>
-                <h3 className='mt-5 text-3xl font-medium'>{event.performance?.title || 'Program'}</h3>
-                <p className='mt-2 text-sm uppercase tracking-[0.18em] text-canvas/40'>{event.venue}</p>
-                <div className='mt-6 flex flex-wrap gap-3'>
-                  {event.performance?.slug ? <Link to={`/eloadasok/${event.performance.slug}`} className='inline-flex rounded-full border border-white/12 px-5 py-3 text-sm text-canvas/82 hover:bg-white/[0.07]'>Részletek</Link> : null}
-                  {event.ticketLink ? <a href={event.ticketLink} target='_blank' rel='noreferrer noopener' className='inline-flex rounded-full bg-ember px-5 py-3 text-sm text-white hover:bg-[#e57a57]'>Jegy erre az időpontra</a> : null}
-                </div>
-              </Card>
+              <ImageOverlayLinkCard
+                key={event.id}
+                to={event.performance?.slug ? `/eloadasok/${event.performance.slug}` : '/musor'}
+                imageUrl={event.performance?.posterUrl}
+                alt={event.performance?.title || 'Program'}
+                title={event.performance?.title || 'Program'}
+                subtitle={event.venue}
+                description={event.performance?.shortDescription}
+                badge='műsor'
+                meta={new Date(event.startAt).toLocaleDateString('hu-HU', { month: 'short', day: 'numeric' })}
+                imagePosition='center top'
+                placeholder='Eseményvizuál hamarosan'
+                className='min-h-[380px]'
+              />
             )) : <p className='text-canvas/60'>Nincs közelgő esemény.</p>}
           </div>
         ) : null}
@@ -120,19 +116,20 @@ function LandingPage() {
         {!isLoading && !error ? (
           <div className='grid gap-6 md:grid-cols-2 xl:grid-cols-3'>
             {creators.length ? creators.map((creator) => (
-              <Card key={creator.id}>
-                {creator.coverImageUrl ? (
-                  <img src={creator.coverImageUrl} alt={creator.name} className='h-56 w-full rounded-[24px] object-cover' />
-                ) : (
-                  <div className='flex h-56 w-full items-end rounded-[24px] border border-dashed border-white/15 bg-gradient-to-br from-white/10 to-transparent p-5 text-sm text-canvas/40'>
-                    Társulati portré hamarosan
-                  </div>
-                )}
-                <h3 className='mt-5 text-2xl'>{creator.name}</h3>
-                <p className='mt-2 text-sm uppercase tracking-[0.18em] text-canvas/45'>{creator.profession}</p>
-                <p className='mt-4 text-sm leading-7 text-canvas/70'>{creator.shortBio}</p>
-                <Link to={`/tarsulat/${creator.slug}`} className='mt-7 inline-flex text-sm text-gold hover:text-canvas'>Profil megnyitása</Link>
-              </Card>
+              <ImageOverlayLinkCard
+                key={creator.id}
+                to={`/tarsulat/${creator.slug}`}
+                imageUrl={creator.coverImageUrl}
+                alt={creator.name}
+                title={creator.name}
+                subtitle={creator.profession}
+                description={creator.shortBio}
+                badge='alkotó'
+                meta='társulat'
+                imagePosition='center top'
+                placeholder='Társulati portré hamarosan'
+                className='min-h-[380px]'
+              />
             )) : <p className='text-canvas/60'>Nincs még társulati adat.</p>}
           </div>
         ) : null}

@@ -75,18 +75,18 @@ function MusorPage() {
   return (
     <>
       <PageHero
-        eyebrow='Műsor'
-        title='Közelgő események és repertoármozgás'
-        description='A havi naptár és az aznapi eseménylista együtt mutatja az Apertúra mozgását.'
-        meta='A kijelölt nap eseményei külön blokkban jelennek meg, onnan közvetlenül tovább lehet lépni az előadás adatlapjára.'
+        eyebrow='MĹ±sor'
+        title='KĂ¶zelgĹ‘ esemĂ©nyek Ă©s repertoĂˇrmozgĂˇs'
+        description='A havi naptĂˇr Ă©s az aznapi esemĂ©nylista egyĂĽtt mutatja az ApertĂşra mozgĂˇsĂˇt.'
+        meta='A kijelĂ¶lt nap esemĂ©nyei kĂĽlĂ¶n blokkban jelennek meg, onnan kĂ¶zvetlenĂĽl tovĂˇbb lehet lĂ©pni az elĹ‘adĂˇs adatlapjĂˇra.'
       />
 
       <Section>
-        {isLoading ? <p className='text-canvas/60'>Betöltés...</p> : null}
+        {isLoading ? <p className='text-canvas/60'>BetĂ¶ltĂ©s...</p> : null}
         {error ? <p className='text-ember'>{error}</p> : null}
         {!isLoading && !error ? (
-          <div className='grid gap-6 xl:grid-cols-[0.92fr_1.08fr]'>
-            <div className='grid gap-6'>
+          <div className='grid items-start gap-6 xl:grid-cols-[minmax(0,1.68fr)_minmax(0,1.02fr)]'>
+            <div className='grid self-start gap-6'>
               <MonthlyCalendar
                 monthDate={activeMonth}
                 eventsByDay={eventsByDay}
@@ -104,10 +104,10 @@ function MusorPage() {
                 onDaySelect={setSelectedDayKey}
               />
 
-              <div className='surface p-6 sm:p-7 md:p-8'>
-                <p className='text-xs uppercase tracking-[0.24em] text-canvas/42'>Események ezen a napon</p>
+              <div className='surface self-start p-6 sm:p-7 md:p-8 xl:max-h-[760px] xl:min-h-[420px] xl:overflow-y-auto'>
+                <p className='text-xs uppercase tracking-[0.24em] text-canvas/42'>EsemĂ©nyek ezen a napon</p>
                 <h2 className='mt-3 editorial-title text-2xl leading-tight sm:text-3xl md:text-4xl'>
-                  {selectedDayKey ? formatHumanDate(selectedDayKey) : 'Válassz napot a naptárból'}
+                  {selectedDayKey ? formatHumanDate(selectedDayKey) : 'VĂˇlassz napot a naptĂˇrbĂłl'}
                 </h2>
                 <div className='mt-6 grid gap-3'>
                   {selectedDayKey && selectedDayEvents.length ? selectedDayEvents.map((event) => (
@@ -124,7 +124,7 @@ function MusorPage() {
                       <p className='mt-4 text-lg font-medium leading-snug sm:text-xl'>{event.performance?.title || 'Program'}</p>
                       <p className='mt-2 text-sm leading-6 text-canvas/60'>{event.venue}</p>
                       <div className='mt-5 flex flex-wrap items-center gap-3'>
-                        <span className='inline-flex text-sm text-gold'>Előadás adatlap megnyitása</span>
+                        <span className='inline-flex text-sm text-gold'>ElĹ‘adĂˇs adatlap megnyitĂˇsa</span>
                         {event.ticketLink ? (
                           <a
                             href={event.ticketLink}
@@ -133,20 +133,20 @@ function MusorPage() {
                             className='inline-flex rounded-full border border-white/12 px-4 py-2 text-sm text-canvas/82 hover:bg-white/[0.07]'
                             onClick={(clickEvent) => clickEvent.stopPropagation()}
                           >
-                            Jegy erre az időpontra
+                            Jegy erre az idĹ‘pontra
                           </a>
                         ) : null}
                       </div>
                     </button>
                   )) : null}
 
-                  {selectedDayKey && !selectedDayEvents.length ? <p className='rounded-[24px] border border-white/10 bg-white/[0.04] px-5 py-5 text-sm leading-7 text-canvas/60'>Erre a napra jelenleg nincs műsoron előadás.</p> : null}
-                  {!selectedDayKey ? <p className='rounded-[24px] border border-white/10 bg-white/[0.04] px-5 py-5 text-sm leading-7 text-canvas/60'>Koppints vagy kattints egy napra, és itt megjelennek az aznapi események.</p> : null}
+                  {selectedDayKey && !selectedDayEvents.length ? <p className='rounded-[24px] border border-white/10 bg-white/[0.04] px-5 py-5 text-sm leading-7 text-canvas/60'>Erre a napra jelenleg nincs mĹ±soron elĹ‘adĂˇs.</p> : null}
+                  {!selectedDayKey ? <p className='rounded-[24px] border border-white/10 bg-white/[0.04] px-5 py-5 text-sm leading-7 text-canvas/60'>Koppints vagy kattints egy napra, Ă©s itt megjelennek az aznapi esemĂ©nyek.</p> : null}
                 </div>
               </div>
             </div>
 
-            <div className='grid gap-6'>
+            <div className='grid self-start gap-6 xl:pr-1'>
               {monthEvents.length ? monthEvents.map((event) => {
                 const interactive = Boolean(event.performance?.slug);
                 return (
@@ -165,22 +165,22 @@ function MusorPage() {
                   >
                     <div className='flex flex-wrap items-center justify-between gap-3'>
                       <DatePill date={event.startAt} time={new Date(event.startAt).toLocaleTimeString('hu-HU', { hour: '2-digit', minute: '2-digit' })} />
-                      <Badge tone='warm'>{event.performance?.title || 'Előadás'}</Badge>
+                      <Badge tone='warm'>{event.performance?.title || 'ElĹ‘adĂˇs'}</Badge>
                     </div>
                     <h2 className='mt-5 text-3xl leading-tight'>{event.performance?.title || 'Program'}</h2>
                     <p className='mt-2 text-sm uppercase tracking-[0.18em] text-canvas/45'>{event.venue}</p>
                     <p className='mt-4 max-w-2xl text-base leading-8 text-canvas/72'>{event.performance?.shortDescription}</p>
                     <div className='mt-7 flex flex-wrap gap-3'>
-                      {interactive ? <span className='inline-flex rounded-full border border-white/12 px-4 py-2.5 text-sm text-canvas/75'>Előadás adatlap</span> : null}
+                      {interactive ? <span className='inline-flex rounded-full border border-white/12 px-4 py-2.5 text-sm text-canvas/75'>ElĹ‘adĂˇs adatlap</span> : null}
                       {event.ticketLink ? (
                         <a href={event.ticketLink} target='_blank' rel='noreferrer noopener' className='inline-flex rounded-full bg-ember px-5 py-3 text-sm text-white hover:bg-[#e57a57]' onClick={(clickEvent) => clickEvent.stopPropagation()}>
-                          Jegy erre az időpontra
+                          Jegy erre az idĹ‘pontra
                         </a>
                       ) : null}
                     </div>
                   </Card>
                 );
-              }) : <p className='text-canvas/60'>Ebben a hónapban még nincs esemény.</p>}
+              }) : <p className='text-canvas/60'>Ebben a hĂłnapban mĂ©g nincs esemĂ©ny.</p>}
             </div>
           </div>
         ) : null}
