@@ -19,6 +19,12 @@ function isSameMonth(a, b) {
 }
 
 const weekDays = ['H', 'K', 'Sze', 'Cs', 'P', 'Szo', 'V'];
+const uiText = {
+  title: 'Havi napt\u00e1r',
+  previousMonth: 'El\u0151z\u0151 h\u00f3nap',
+  nextMonth: 'K\u00f6vetkez\u0151 h\u00f3nap',
+  eventLabel: 'esem\u00e9ny',
+};
 
 function MonthlyCalendar({ monthDate, eventsByDay, selectedDayKey, onPrevMonth, onNextMonth, onDaySelect }) {
   const monthStart = startOfMonth(monthDate);
@@ -34,15 +40,15 @@ function MonthlyCalendar({ monthDate, eventsByDay, selectedDayKey, onPrevMonth, 
     <div className='surface overflow-hidden p-4 sm:p-5 md:p-6'>
       <div className='flex items-start justify-between gap-3'>
         <div>
-          <p className='text-[11px] uppercase tracking-[0.28em] text-canvas/42'>Havi naptár</p>
+          <p className='text-[11px] uppercase tracking-[0.28em] text-canvas/42'>{uiText.title}</p>
           <h2 className='mt-2 editorial-title text-2xl md:text-3xl'>{monthStart.toLocaleDateString('hu-HU', { year: 'numeric', month: 'long' })}</h2>
         </div>
         <div className='flex gap-2'>
-          <button type='button' className='inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 text-canvas/76 transition hover:bg-white/[0.06] hover:text-canvas' onClick={onPrevMonth} aria-label='Előző hónap'>
-            ‹
+          <button type='button' className='inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 text-canvas/76 transition hover:bg-white/[0.06] hover:text-canvas' onClick={onPrevMonth} aria-label={uiText.previousMonth}>
+            <span aria-hidden='true'>&lsaquo;</span>
           </button>
-          <button type='button' className='inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 text-canvas/76 transition hover:bg-white/[0.06] hover:text-canvas' onClick={onNextMonth} aria-label='Következő hónap'>
-            ›
+          <button type='button' className='inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 text-canvas/76 transition hover:bg-white/[0.06] hover:text-canvas' onClick={onNextMonth} aria-label={uiText.nextMonth}>
+            <span aria-hidden='true'>&rsaquo;</span>
           </button>
         </div>
       </div>
@@ -78,7 +84,7 @@ function MonthlyCalendar({ monthDate, eventsByDay, selectedDayKey, onPrevMonth, 
                 {hasEvents ? (
                   <>
                     <span className={`h-1.5 w-1.5 rounded-full ${isSelected ? 'bg-gold' : 'bg-ember'}`} />
-                    {dayEvents.length > 1 ? <span className='hidden text-[10px] text-canvas/46 sm:inline'>{dayEvents.length} esemény</span> : null}
+                    {dayEvents.length > 1 ? <span className='hidden text-[10px] text-canvas/46 sm:inline'>{dayEvents.length} {uiText.eventLabel}</span> : null}
                   </>
                 ) : <span className='h-1.5 w-1.5 rounded-full bg-transparent' />}
               </div>

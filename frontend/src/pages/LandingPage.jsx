@@ -17,6 +17,7 @@ function LandingPage() {
   const [news, setNews] = useState([]);
   const [events, setEvents] = useState([]);
   const [creators, setCreators] = useState([]);
+  const [stats, setStats] = useState({ newsCount: null, eventsCount: null });
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(true);
 
@@ -25,6 +26,10 @@ function LandingPage() {
   useEffect(() => {
     Promise.all([newsService.list(), eventService.list(), creatorService.list()])
       .then(([newsItems, eventItems, creatorItems]) => {
+        setStats({
+          newsCount: newsItems.length,
+          eventsCount: eventItems.length,
+        });
         setNews(newsItems.slice(0, 4));
         setEvents(eventItems.slice(0, 4));
         setCreators(creatorItems.slice(0, 3));
@@ -32,6 +37,18 @@ function LandingPage() {
       .catch((err) => setError(err.message))
       .finally(() => setIsLoading(false));
   }, []);
+
+  const renderStatValue = (value) => {
+    if (isLoading) {
+      return '—';
+    }
+
+    if (error || value === null || value === undefined) {
+      return '…';
+    }
+
+    return value;
+  };
 
   return (
     <>
@@ -56,11 +73,11 @@ function LandingPage() {
               <div className='grid gap-4 sm:grid-cols-2'>
                 <div className='surface p-5 md:p-6'>
                   <p className='text-xs uppercase tracking-[0.28em] text-canvas/42'>Hírek</p>
-                  <p className='mt-3 text-4xl text-gold'>{news.length}</p>
+                  <p className='mt-3 text-4xl text-gold'>{renderStatValue(stats.newsCount)}</p>
                 </div>
                 <div className='surface p-5 md:p-6'>
                   <p className='text-xs uppercase tracking-[0.28em] text-canvas/42'>Események</p>
-                  <p className='mt-3 text-4xl text-ember'>{events.length}</p>
+                  <p className='mt-3 text-4xl text-ember'>{renderStatValue(stats.eventsCount)}</p>
                 </div>
               </div>
             </div>

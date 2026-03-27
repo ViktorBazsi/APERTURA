@@ -8,6 +8,22 @@ import Badge from '../components/ui/Badge';
 import MonthlyCalendar from '../components/calendar/MonthlyCalendar';
 import { eventService } from '../services/event.service';
 
+const uiText = {
+  eyebrow: 'M\u0171sor',
+  title: 'K\u00f6zelg\u0151 esem\u00e9nyek \u00e9s reperto\u00e1rmozg\u00e1s',
+  description: 'A havi napt\u00e1r \u00e9s az aznapi esem\u00e9nylista egy\u00fctt mutatja az Apert\u00fara mozg\u00e1s\u00e1t.',
+  meta: 'A kijel\u00f6lt nap esem\u00e9nyei k\u00fcl\u00f6n blokkban jelennek meg, onnan k\u00f6zvetlen\u00fcl tov\u00e1bb lehet l\u00e9pni az el\u0151ad\u00e1s adatlapj\u00e1ra.',
+  selectedDayEyebrow: 'Esem\u00e9nyek ezen a napon',
+  selectDay: 'V\u00e1lassz napot a napt\u00e1rb\u00f3l',
+  openPerformance: 'El\u0151ad\u00e1s adatlap megnyit\u00e1sa',
+  noPerformanceToday: 'Erre a napra jelenleg nincs m\u0171soron el\u0151ad\u00e1s.',
+  tapDay: 'Koppints vagy kattints egy napra, \u00e9s itt megjelennek az aznapi esem\u00e9nyek.',
+  performanceLabel: 'El\u0151ad\u00e1s',
+  ticketForDate: 'Jegy erre az id\u0151pontra',
+  openPerformanceCard: 'El\u0151ad\u00e1s adatlap',
+  noEventsThisMonth: 'Ebben a h\u00f3napban m\u00e9g nincs esem\u00e9ny.',
+};
+
 function eventDateKey(date) {
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
 }
@@ -75,14 +91,14 @@ function MusorPage() {
   return (
     <>
       <PageHero
-        eyebrow='MĹ±sor'
-        title='KĂ¶zelgĹ‘ esemĂ©nyek Ă©s repertoĂˇrmozgĂˇs'
-        description='A havi naptĂˇr Ă©s az aznapi esemĂ©nylista egyĂĽtt mutatja az ApertĂşra mozgĂˇsĂˇt.'
-        meta='A kijelĂ¶lt nap esemĂ©nyei kĂĽlĂ¶n blokkban jelennek meg, onnan kĂ¶zvetlenĂĽl tovĂˇbb lehet lĂ©pni az elĹ‘adĂˇs adatlapjĂˇra.'
+        eyebrow={uiText.eyebrow}
+        title={uiText.title}
+        description={uiText.description}
+        meta={uiText.meta}
       />
 
       <Section>
-        {isLoading ? <p className='text-canvas/60'>BetĂ¶ltĂ©s...</p> : null}
+        {isLoading ? <p className='text-canvas/60'>Bet\u00f6lt\u00e9s...</p> : null}
         {error ? <p className='text-ember'>{error}</p> : null}
         {!isLoading && !error ? (
           <div className='grid items-start gap-6 xl:grid-cols-[minmax(0,1.68fr)_minmax(0,1.02fr)]'>
@@ -105,9 +121,9 @@ function MusorPage() {
               />
 
               <div className='surface self-start p-6 sm:p-7 md:p-8 xl:max-h-[760px] xl:min-h-[420px] xl:overflow-y-auto'>
-                <p className='text-xs uppercase tracking-[0.24em] text-canvas/42'>EsemĂ©nyek ezen a napon</p>
+                <p className='text-xs uppercase tracking-[0.24em] text-canvas/42'>{uiText.selectedDayEyebrow}</p>
                 <h2 className='mt-3 editorial-title text-2xl leading-tight sm:text-3xl md:text-4xl'>
-                  {selectedDayKey ? formatHumanDate(selectedDayKey) : 'VĂˇlassz napot a naptĂˇrbĂłl'}
+                  {selectedDayKey ? formatHumanDate(selectedDayKey) : uiText.selectDay}
                 </h2>
                 <div className='mt-6 grid gap-3'>
                   {selectedDayKey && selectedDayEvents.length ? selectedDayEvents.map((event) => (
@@ -124,7 +140,7 @@ function MusorPage() {
                       <p className='mt-4 text-lg font-medium leading-snug sm:text-xl'>{event.performance?.title || 'Program'}</p>
                       <p className='mt-2 text-sm leading-6 text-canvas/60'>{event.venue}</p>
                       <div className='mt-5 flex flex-wrap items-center gap-3'>
-                        <span className='inline-flex text-sm text-gold'>ElĹ‘adĂˇs adatlap megnyitĂˇsa</span>
+                        <span className='inline-flex text-sm text-gold'>{uiText.openPerformance}</span>
                         {event.ticketLink ? (
                           <a
                             href={event.ticketLink}
@@ -133,15 +149,15 @@ function MusorPage() {
                             className='inline-flex rounded-full border border-white/12 px-4 py-2 text-sm text-canvas/82 hover:bg-white/[0.07]'
                             onClick={(clickEvent) => clickEvent.stopPropagation()}
                           >
-                            Jegy erre az idĹ‘pontra
+                            {uiText.ticketForDate}
                           </a>
                         ) : null}
                       </div>
                     </button>
                   )) : null}
 
-                  {selectedDayKey && !selectedDayEvents.length ? <p className='rounded-[24px] border border-white/10 bg-white/[0.04] px-5 py-5 text-sm leading-7 text-canvas/60'>Erre a napra jelenleg nincs mĹ±soron elĹ‘adĂˇs.</p> : null}
-                  {!selectedDayKey ? <p className='rounded-[24px] border border-white/10 bg-white/[0.04] px-5 py-5 text-sm leading-7 text-canvas/60'>Koppints vagy kattints egy napra, Ă©s itt megjelennek az aznapi esemĂ©nyek.</p> : null}
+                  {selectedDayKey && !selectedDayEvents.length ? <p className='rounded-[24px] border border-white/10 bg-white/[0.04] px-5 py-5 text-sm leading-7 text-canvas/60'>{uiText.noPerformanceToday}</p> : null}
+                  {!selectedDayKey ? <p className='rounded-[24px] border border-white/10 bg-white/[0.04] px-5 py-5 text-sm leading-7 text-canvas/60'>{uiText.tapDay}</p> : null}
                 </div>
               </div>
             </div>
@@ -165,22 +181,22 @@ function MusorPage() {
                   >
                     <div className='flex flex-wrap items-center justify-between gap-3'>
                       <DatePill date={event.startAt} time={new Date(event.startAt).toLocaleTimeString('hu-HU', { hour: '2-digit', minute: '2-digit' })} />
-                      <Badge tone='warm'>{event.performance?.title || 'ElĹ‘adĂˇs'}</Badge>
+                      <Badge tone='warm'>{event.performance?.title || uiText.performanceLabel}</Badge>
                     </div>
                     <h2 className='mt-5 text-3xl leading-tight'>{event.performance?.title || 'Program'}</h2>
                     <p className='mt-2 text-sm uppercase tracking-[0.18em] text-canvas/45'>{event.venue}</p>
                     <p className='mt-4 max-w-2xl text-base leading-8 text-canvas/72'>{event.performance?.shortDescription}</p>
                     <div className='mt-7 flex flex-wrap gap-3'>
-                      {interactive ? <span className='inline-flex rounded-full border border-white/12 px-4 py-2.5 text-sm text-canvas/75'>ElĹ‘adĂˇs adatlap</span> : null}
+                      {interactive ? <span className='inline-flex rounded-full border border-white/12 px-4 py-2.5 text-sm text-canvas/75'>{uiText.openPerformanceCard}</span> : null}
                       {event.ticketLink ? (
                         <a href={event.ticketLink} target='_blank' rel='noreferrer noopener' className='inline-flex rounded-full bg-ember px-5 py-3 text-sm text-white hover:bg-[#e57a57]' onClick={(clickEvent) => clickEvent.stopPropagation()}>
-                          Jegy erre az idĹ‘pontra
+                          {uiText.ticketForDate}
                         </a>
                       ) : null}
                     </div>
                   </Card>
                 );
-              }) : <p className='text-canvas/60'>Ebben a hĂłnapban mĂ©g nincs esemĂ©ny.</p>}
+              }) : <p className='text-canvas/60'>{uiText.noEventsThisMonth}</p>}
             </div>
           </div>
         ) : null}
